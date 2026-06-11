@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { db } from "./utils/db";
+import { useAuth } from "./context/AuthContext";
 import Dashboard from "./components/Dashboard";
 import PlayerForm from "./components/PlayerForm";
 import EvaluationGuide from "./components/EvaluationGuide";
 import PrintView from "./components/PrintView";
 import PlayerDetail from "./components/PlayerDetail";
 import ConfirmModal from "./components/ConfirmModal";
+import AuthModal from "./components/AuthModal";
 
 export default function App() {
+  const { user, authLoading, signOut } = useAuth();
+  const currentUserId = user?.id ?? null;
+
   const [page,           setPage]           = useState("dashboard");
   const [players,        setPlayers]        = useState([]);
   const [editPlayer,     setEditPlayer]     = useState(null);
@@ -16,6 +21,7 @@ export default function App() {
   const [confirmDeleteId,setConfirmDeleteId]= useState(null);
   const [loading,        setLoading]        = useState(true);
   const [error,          setError]          = useState(null);
+  const [showAuth,       setShowAuth]       = useState(false);
 
   useEffect(() => {
     db.getAll()
@@ -25,16 +31,13 @@ export default function App() {
   }, []);
 
   const reload = async () => {
-    try {
-      setPlayers(await db.getAll());
-    } catch (e) {
-      setError(e.message);
-    }
+    try { setPlayers(await db.getAll()); }
+    catch (e) { setError(e.message); }
   };
 
   const handleSave = async (data) => {
-    if (editPlayer) await db.update(editPlayer.id, data);
-    else await db.add(data);
+    if (editPlayer) await db.update(editPlayer.id, { ...data, userId: currentUserId });
+    else            await db.add({ ...data, userId: currentUserId });
     await reload();
     setPage("dashboard");
     setEditPlayer(null);
@@ -45,6 +48,12 @@ export default function App() {
     await reload();
     setDetailPlayer(null);
     setConfirmDeleteId(null);
+  };
+
+  const goNew = () => {
+    if (!user) { setShowAuth(true); return; }
+    setEditPlayer(null);
+    setPage("form");
   };
 
   const isForm = page === "form" || editPlayer;
@@ -66,7 +75,17 @@ export default function App() {
           ))}
         </nav>
 
-        <div style={{flexShrink:0}}>
+        <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0}}>
+          {!authLoading && (
+            user ? (
+              <>
+                <span style={{color:"#444",fontSize:"11px",fontFamily:"'Rajdhani',sans-serif",maxWidth:"160px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.email}</span>
+                <button onClick={signOut} style={{padding:"6px 14px",borderRadius:"7px",border:"1px solid #333",background:"transparent",color:"#666",cursor:"pointer",fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:"12px"}}>SALIR</button>
+              </>
+            ) : (
+              <button onClick={() => setShowAuth(true)} style={{padding:"8px 18px",borderRadius:"8px",border:"none",background:"linear-gradient(135deg,#6c63ff,#00d4ff)",color:"#fff",cursor:"pointer",fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:"13px",boxShadow:"0 2px 12px #6c63ff44"}}>INICIAR SESIÓN</button>
+            )
+          )}
           {isForm && (
             <button onClick={() => { setPage("dashboard"); setEditPlayer(null); }} style={{padding:"8px 18px",borderRadius:"8px",border:"1px solid #333",background:"transparent",color:"#aaa",cursor:"pointer",fontFamily:"'Rajdhani',sans-serif",fontWeight:700,fontSize:"13px"}}>← Volver</button>
           )}
@@ -95,7 +114,8 @@ export default function App() {
             {page === "dashboard" && !isForm && (
               <Dashboard
                 players={players}
-                onNew={() => { setEditPlayer(null); setPage("form"); }}
+                currentUserId={currentUserId}
+                onNew={goNew}
                 onPrintAll={() => setPrintPlayers(players)}
                 setDetailPlayer={setDetailPlayer}
               />
@@ -105,6 +125,7 @@ export default function App() {
                 <h1 style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"32px",letterSpacing:"0.2em",marginBottom:"32px"}}>{editPlayer ? "✏️ EDITAR JUGADOR" : "➕ NUEVO JUGADOR"}</h1>
                 <PlayerForm
                   initial={editPlayer}
+                  currentUserId={currentUserId}
                   onSave={handleSave}
                   onCancel={() => { setPage("dashboard"); setEditPlayer(null); }}
                 />
@@ -119,11 +140,18 @@ export default function App() {
         )}
       </main>
 
-      {printPlayers && <PrintView players={printPlayers} onClose={() => setPrintPlayers(null)} />}
+      {printPlayers && (
+        <PrintView
+          players={printPlayers}
+          currentUserId={currentUserId}
+          onClose={() => setPrintPlayers(null)}
+        />
+      )}
 
       {detailPlayer && (
         <PlayerDetail
           player={detailPlayer}
+          currentUserId={currentUserId}
           onClose={() => setDetailPlayer(null)}
           onEdit={() => { setEditPlayer(detailPlayer); setDetailPlayer(null); setPage("form"); }}
           onDelete={() => setConfirmDeleteId(detailPlayer.id)}
@@ -138,6 +166,8 @@ export default function App() {
           onCancel={() => setConfirmDeleteId(null)}
         />
       )}
+
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </div>
   );
 }

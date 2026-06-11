@@ -4,7 +4,7 @@ import { calcOverall, getCardType } from "../utils/helpers";
 
 const GOLD_TYPES = new Set(["gold_rare", "gold_nonrare", "toty", "inform", "hero"]);
 
-export default function Dashboard({ players, onNew, onPrintAll, setDetailPlayer }) {
+export default function Dashboard({ players, currentUserId, onNew, onPrintAll, setDetailPlayer }) {
   const [search, setSearch] = useState("");
 
   const filtered = players.filter(p =>
@@ -65,7 +65,7 @@ export default function Dashboard({ players, onNew, onPrintAll, setDetailPlayer 
         </div>
       ) : (
         <div style={{display:"flex",flexWrap:"wrap",gap:"20px"}}>
-          {filtered.map(p => <FifaCard key={p.id} player={p} size="small" onClick={() => setDetailPlayer(p)} />)}
+          {filtered.map(p => <FifaCard key={p.id} player={p} size="small" currentUserId={currentUserId} onClick={() => setDetailPlayer(p)} />)}
         </div>
       )}
     </>

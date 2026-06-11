@@ -13,6 +13,7 @@ const fromRow = (row) => ({
   cardType:    row.card_type,
   stats:       row.stats,
   createdAt:   row.created_at,
+  userId:      row.user_id,
 });
 
 // Convierte objeto de la app (camelCase) a fila de Supabase (snake_case)
@@ -26,6 +27,7 @@ const toRow = (player) => ({
   photo_url:   player.photoUrl,
   card_type:   player.cardType,
   stats:       player.stats,
+  user_id:     player.userId,
 });
 
 export const db = {

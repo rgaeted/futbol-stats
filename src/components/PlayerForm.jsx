@@ -8,7 +8,7 @@ import { calcOverall, getCardType } from "../utils/helpers";
 const inp = {width:"100%",background:"#0d0d1a",border:"1px solid #333",borderRadius:"8px",padding:"10px 14px",color:"#fff",fontSize:"14px",fontFamily:"'Rajdhani',sans-serif",boxSizing:"border-box",outline:"none"};
 const lbl = {color:"#888",fontSize:"11px",fontWeight:700,letterSpacing:"0.1em",marginBottom:"4px",display:"block",fontFamily:"'Rajdhani',sans-serif"};
 
-export default function PlayerForm({ initial, onSave, onCancel }) {
+export default function PlayerForm({ initial, currentUserId, onSave, onCancel }) {
   const [form, setForm] = useState(
     initial || { name:"", position:"ST", nationality:"Chile", club:"Colo-Colo", age:"", number:"", photoUrl:"", cardType:"", stats:{...defaultStats} }
   );
@@ -36,7 +36,7 @@ export default function PlayerForm({ initial, onSave, onCancel }) {
   return (
     <div style={{display:"flex",gap:"32px",flexWrap:"wrap",alignItems:"flex-start"}}>
       <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"16px"}}>
-        <FifaCard player={{...form, cardType: form.cardType || autoType}} />
+        <FifaCard player={{...form, cardType: form.cardType || autoType, userId: currentUserId}} currentUserId={currentUserId} />
         <div style={{color:"#555",fontSize:"11px",fontFamily:"'Rajdhani',sans-serif",letterSpacing:"0.1em"}}>VISTA PREVIA EN VIVO</div>
       </div>
 

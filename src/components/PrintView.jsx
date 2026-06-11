@@ -1,6 +1,6 @@
 import FifaCard from "./FifaCard";
 
-export default function PrintView({ players, onClose }) {
+export default function PrintView({ players, currentUserId, onClose }) {
   const toPrint = players.filter(p => p._selected).length > 0
     ? players.filter(p => p._selected)
     : players;
@@ -15,7 +15,7 @@ export default function PrintView({ players, onClose }) {
         </div>
       </div>
       <div style={{display:"flex",flexWrap:"wrap",gap:"20px",padding:"30px",justifyContent:"center",background:"#f5f5f5",minHeight:"calc(100vh - 70px)"}}>
-        {toPrint.map(p => <FifaCard key={p.id} player={p} />)}
+        {toPrint.map(p => <FifaCard key={p.id} player={p} currentUserId={currentUserId} />)}
       </div>
     </div>
   );

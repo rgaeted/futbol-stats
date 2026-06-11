@@ -1,12 +1,23 @@
 import { CARD_TYPES, statLabels, defaultStats } from "../constants/cardTypes";
 import { calcOverall, getCardType, adjustColor, getFlagEmoji } from "../utils/helpers";
 
-export default function FifaCard({ player, size = "full", onClick }) {
-  const overall = calcOverall(player.stats);
-  const typeKey = player.cardType || getCardType(overall);
-  const type    = CARD_TYPES[typeKey] || CARD_TYPES.gold_rare;
-  const stats   = player.stats || defaultStats;
-  const s       = size === "small" ? 0.45 : 1;
+function PersonSilhouette({ size: sz, color }) {
+  return (
+    <svg width={sz} height={sz * 1.3} viewBox="0 0 80 104" fill={color} xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="26" r="20" />
+      <path d="M8 104 C8 66 24 54 40 54 C56 54 72 66 72 104 Z" />
+    </svg>
+  );
+}
+
+export default function FifaCard({ player, size = "full", onClick, currentUserId }) {
+  const overall  = calcOverall(player.stats);
+  const typeKey  = player.cardType || getCardType(overall);
+  const type     = CARD_TYPES[typeKey] || CARD_TYPES.gold_rare;
+  const stats    = player.stats || defaultStats;
+  const s        = size === "small" ? 0.45 : 1;
+  const isOwner  = !!currentUserId && !!player.userId && currentUserId === player.userId;
+  const silhouetteColor = type.text === "#ffffff" ? "rgba(255,255,255,0.35)" : "rgba(0,0,0,0.45)";
 
   return (
     <div
@@ -40,9 +51,13 @@ export default function FifaCard({ player, size = "full", onClick }) {
 
       {/* Photo */}
       <div style={{position:"relative",zIndex:2,display:"flex",justifyContent:"center",height:`${160*s}px`,margin:`${-10*s}px 0 0`}}>
-        {player.photoUrl
+        {player.photoUrl && isOwner
           ? <img src={player.photoUrl} alt={player.name} style={{height:"100%",objectFit:"contain",filter:`drop-shadow(0 ${4*s}px ${12*s}px #00000099)`}} />
-          : <div style={{width:`${130*s}px`,height:`${160*s}px`,display:"flex",alignItems:"center",justifyContent:"center",background:`${type.accent}11`,borderRadius:`${10*s}px ${10*s}px 0 0`}}><div style={{fontSize:`${60*s}px`,opacity:0.4}}>⚽</div></div>
+          : player.photoUrl && !isOwner
+            ? <div style={{width:`${130*s}px`,height:`${160*s}px`,display:"flex",alignItems:"center",justifyContent:"center",background:`${type.accent}11`,borderRadius:`${10*s}px ${10*s}px 0 0`}}>
+                <PersonSilhouette sz={70*s} color={silhouetteColor} />
+              </div>
+            : <div style={{width:`${130*s}px`,height:`${160*s}px`,display:"flex",alignItems:"center",justifyContent:"center",background:`${type.accent}11`,borderRadius:`${10*s}px ${10*s}px 0 0`}}><div style={{fontSize:`${60*s}px`,opacity:0.4}}>⚽</div></div>
         }
         <div style={{position:"absolute",bottom:0,left:"50%",transform:"translateX(-50%)",width:`${200*s}px`,height:`${40*s}px`,background:`radial-gradient(ellipse,${type.glow}44 0%,transparent 70%)`,borderRadius:"50%"}} />
       </div>
