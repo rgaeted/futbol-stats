@@ -1,0 +1,227 @@
+export const PROTOCOLS = [
+  {
+    key: "pace", label: "VELOCIDAD", abbr: "PAC", color: "#00d4ff", icon: "⚡",
+    description: "Mide la velocidad máxima de sprint y aceleración explosiva del jugador en cancha.",
+    equipment: [
+      "Conos de señalización", "Cronómetro o app de timing",
+      "Cinta métrica (30 m)", "Pista plana de césped o sintético",
+    ],
+    tests: [
+      {
+        name: "Sprint 30 metros", objective: "Medir velocidad máxima de carrera",
+        setup: "Coloca conos a 0 m y 30 m sobre una línea recta en el campo. El jugador parte desde posición estática con un pie adelantado.",
+        execution: "El evaluador da la señal (silbato). El jugador acelera a máxima velocidad hasta el cono de llegada. Se cronometra desde la señal hasta cruzar la línea.",
+        attempts: 2, best: "Se toma el mejor de 2 intentos con 3 min de descanso entre ellos.",
+        scoring: [
+          { range: "< 3.8 seg",   pts: "92–99", label: "Élite mundial" },
+          { range: "3.8–4.1 seg", pts: "80–91", label: "Muy rápido" },
+          { range: "4.2–4.5 seg", pts: "65–79", label: "Rápido" },
+          { range: "4.6–4.9 seg", pts: "48–64", label: "Promedio" },
+          { range: "5.0–5.4 seg", pts: "30–47", label: "Lento" },
+          { range: "> 5.4 seg",   pts: "10–29", label: "Muy lento" },
+        ],
+      },
+      {
+        name: "Aceleración 10 metros", objective: "Medir capacidad de arranque explosivo",
+        setup: "Conos a 0 m y 10 m. Misma metodología que los 30 m. Se puede hacer en el mismo recorrido midiendo la marca a los 10 m.",
+        execution: "El jugador parte desde posición estática. Se cronometra solo hasta los 10 m. Permite evaluar la explosividad del primer paso.",
+        attempts: 2, best: "Se promedia la puntuación con el sprint de 30 m según la fórmula.",
+        scoring: [
+          { range: "< 1.65 seg",   pts: "92–99", label: "Explosivo élite" },
+          { range: "1.65–1.80 seg", pts: "78–91", label: "Muy explosivo" },
+          { range: "1.81–1.95 seg", pts: "60–77", label: "Bueno" },
+          { range: "1.96–2.10 seg", pts: "42–59", label: "Promedio" },
+          { range: "> 2.10 seg",   pts: "10–41", label: "Por mejorar" },
+        ],
+      },
+    ],
+    formula: "PAC = (Puntos sprint 30m × 0.60) + (Puntos aceleración 10m × 0.40)",
+  },
+  {
+    key: "shooting", label: "DISPARO", abbr: "SHO", color: "#ff6b6b", icon: "🎯",
+    description: "Evalúa la potencia, precisión y técnica de remate al arco desde distintas situaciones.",
+    equipment: [
+      "Balones de fútbol (mínimo 5)", "Arco reglamentario",
+      "Cinta adhesiva para zonas del arco", "Cinta métrica", "Velocímetro de balón (opcional)",
+    ],
+    tests: [
+      {
+        name: "Precisión de disparo (10 remates)", objective: "Medir porcentaje de acierto al arco dividido en zonas",
+        setup: "Divide el arco en 6 zonas con cinta: esquinas altas (×2), esquinas bajas (×2), centro alto y centro bajo. Jugador a 16.5 m (punto de penal). Sin portero.",
+        execution: "El jugador ejecuta 10 disparos consecutivos al arco estático. Se registra: gol / fuera / zona impactada. Esquinas valen 2 pts, centro vale 1 pt.",
+        attempts: 10, best: "Suma total de puntos según zonas acertadas (máx 20 pts).",
+        scoring: [
+          { range: "17–20 pts", pts: "90–99", label: "Francotirador" },
+          { range: "13–16 pts", pts: "74–89", label: "Muy preciso" },
+          { range: "9–12 pts",  pts: "56–73", label: "Preciso" },
+          { range: "5–8 pts",   pts: "36–55", label: "Regular" },
+          { range: "1–4 pts",   pts: "18–35", label: "Impreciso" },
+          { range: "0 pts",     pts: "10–17", label: "Muy impreciso" },
+        ],
+      },
+      {
+        name: "Potencia de disparo (velocímetro)", objective: "Velocidad máxima del balón en disparo con pierna dominante",
+        setup: "Balón estático a 11 m del arco. Velocímetro o app de radar ubicado detrás del arco. Zona libre alrededor del jugador.",
+        execution: "El jugador ejecuta 3 disparos máximos con pierna dominante. Se registra la velocidad de cada balón en km/h. Sin carrerilla larga.",
+        attempts: 3, best: "Se toma la velocidad máxima de los 3 intentos.",
+        scoring: [
+          { range: "> 110 km/h",  pts: "90–99", label: "Cañonero élite" },
+          { range: "90–110 km/h", pts: "72–89", label: "Muy potente" },
+          { range: "70–89 km/h",  pts: "52–71", label: "Bueno" },
+          { range: "50–69 km/h",  pts: "30–51", label: "Moderado" },
+          { range: "< 50 km/h",   pts: "10–29", label: "Débil" },
+        ],
+      },
+    ],
+    formula: "SHO = (Precisión × 0.55) + (Potencia × 0.30) + (Técnica de golpeo observada por evaluador × 0.15)",
+  },
+  {
+    key: "passing", label: "PASE", abbr: "PAS", color: "#00ff88", icon: "🔁",
+    description: "Evalúa la precisión, variedad y visión de juego en la distribución del balón a distintas distancias.",
+    equipment: [
+      "Balones de fútbol (mínimo 6)", "5 conos en posiciones específicas",
+      "Pared de rebote o compañero evaluador", "Cinta métrica",
+    ],
+    tests: [
+      {
+        name: "Precisión pase corto/medio (10 pases)", objective: "Porcentaje de pases completados a blancos en distintas distancias y ángulos",
+        setup: "Coloca 5 conos a 10m, 15m, 20m, 25m y 30m del jugador en ángulos variados (no en línea recta). Cada cono = un 'compañero'. Se realizan 2 pases por cono.",
+        execution: "El jugador ejecuta los 10 pases alternando pies cuando sea posible. Pase exitoso: balón pasa a menos de 1 m del cono con trayectoria controlada.",
+        attempts: 10, best: "Se cuenta el número de pases precisos de 10.",
+        scoring: [
+          { range: "10/10",  pts: "95–99", label: "Perfecto" },
+          { range: "8–9/10", pts: "78–94", label: "Muy preciso" },
+          { range: "6–7/10", pts: "58–77", label: "Bueno" },
+          { range: "4–5/10", pts: "38–57", label: "Promedio" },
+          { range: "< 4/10", pts: "10–37", label: "Por mejorar" },
+        ],
+      },
+      {
+        name: "Pase largo (8 intentos)", objective: "Precisión en pases largos de 30–40 metros",
+        setup: "Zona circular de 3 m de diámetro (marcada con conos) a 35 m del jugador. El jugador debe golpear el balón hacia la zona con precisión.",
+        execution: "5 intentos con pierna dominante y 3 con pierna no dominante. Se anota como exitoso si el balón cae dentro o toca la zona circular.",
+        attempts: 8, best: "Total de aciertos sobre 8 ponderado según pierna usada.",
+        scoring: [
+          { range: "7–8 aciertos", pts: "88–99", label: "Visión élite" },
+          { range: "5–6 aciertos", pts: "68–87", label: "Muy bueno" },
+          { range: "3–4 aciertos", pts: "46–67", label: "Bueno" },
+          { range: "1–2 aciertos", pts: "24–45", label: "Regular" },
+          { range: "0 aciertos",   pts: "10–23", label: "Por mejorar" },
+        ],
+      },
+    ],
+    formula: "PAS = (Precisión corto/medio × 0.50) + (Pase largo × 0.35) + (Pierna no dominante observada × 0.15)",
+  },
+  {
+    key: "dribbling", label: "REGATE", abbr: "DRI", color: "#ffd93d", icon: "🌀",
+    description: "Mide el control del balón en movimiento, cambios de dirección y habilidad técnica individual.",
+    equipment: [
+      "Balones de fútbol", "8 conos o postes de slalom separados 1.5 m",
+      "Cronómetro", "Cinta métrica (espacio mínimo 20 m)",
+    ],
+    tests: [
+      {
+        name: "Slalom cronometrado (ida y vuelta)", objective: "Velocidad de conducción con regate entre conos",
+        setup: "8 conos separados 1.5 m entre sí en línea recta (total ~12 m). El jugador conduce el balón en slalom de ida, rodea el último cono y vuelve en slalom.",
+        execution: "Jugador conduce el balón zigzagueando todos los conos de ida y vuelta sin perderlo. PENALIZACIÓN: +0.5 seg por cada cono derribado. Balón perdido = intento inválido.",
+        attempts: 2, best: "Se toma el mejor tiempo válido de 2 intentos.",
+        scoring: [
+          { range: "< 7.0 seg",    pts: "92–99", label: "Maestro del regate" },
+          { range: "7.0–8.5 seg",  pts: "74–91", label: "Muy hábil" },
+          { range: "8.6–10.0 seg", pts: "54–73", label: "Bueno" },
+          { range: "10.1–12.0 seg",pts: "32–53", label: "Promedio" },
+          { range: "> 12.0 seg",   pts: "10–31", label: "Por desarrollar" },
+        ],
+      },
+      {
+        name: "Control y toque (jueguito)", objective: "Número máximo de toques consecutivos sin perder el balón",
+        setup: "El jugador en espacio libre de al menos 3×3 m. Puede usar cualquier parte del cuerpo excepto brazos y manos. El evaluador cuenta en voz alta.",
+        execution: "Se mide el número máximo de toques en 2 intentos de 60 segundos. Si pierde el balón durante el intento, se cuenta lo acumulado hasta ese momento.",
+        attempts: 2, best: "Se toma el número máximo de toques conseguido en cualquier intento.",
+        scoring: [
+          { range: "> 80 toques",  pts: "90–99", label: "Técnico élite" },
+          { range: "60–80 toques", pts: "72–89", label: "Muy técnico" },
+          { range: "40–59 toques", pts: "52–71", label: "Bueno" },
+          { range: "20–39 toques", pts: "30–51", label: "Promedio" },
+          { range: "< 20 toques",  pts: "10–29", label: "Básico" },
+        ],
+      },
+    ],
+    formula: "DRI = (Slalom cronometrado × 0.55) + (Control y toque × 0.45)",
+  },
+  {
+    key: "defending", label: "DEFENSA", abbr: "DEF", color: "#6c63ff", icon: "🛡️",
+    description: "Evalúa la capacidad de recuperación de balón, posicionamiento defensivo y anticipación táctica.",
+    equipment: [
+      "Balones de fútbol", "Conos de delimitación (zona 10×10 m)",
+      "1 evaluador como atacante", "1 evaluador como pasador adicional", "Cronómetro",
+    ],
+    tests: [
+      {
+        name: "1v1 Defensivo (5 rondas)", objective: "Porcentaje de balones recuperados en situación uno contra uno",
+        setup: "Zona cuadrada de 10×10 m delimitada con conos. Un atacante conduce el balón dentro de la zona. El defensor parte del centro. El atacante intenta mantener la posesión.",
+        execution: "5 rondas de 30 segundos cada una. El defensor debe robar el balón o sacarlo de la zona. Se cuenta: recuperaciones del defensor vs total de posesiones del atacante.",
+        attempts: 5, best: "% de recuperación = recuperaciones / total posesiones del atacante × 100.",
+        scoring: [
+          { range: "≥ 75%", pts: "88–99", label: "Marcador férreo" },
+          { range: "60–74%", pts: "70–87", label: "Muy sólido" },
+          { range: "45–59%", pts: "50–69", label: "Bueno" },
+          { range: "30–44%", pts: "30–49", label: "Promedio" },
+          { range: "< 30%",  pts: "10–29", label: "Por mejorar" },
+        ],
+      },
+      {
+        name: "Interceptación de pases (60 seg)", objective: "Número de pases interceptados en movimiento",
+        setup: "Dos pasadores a 15 m de distancia entre sí. El defensor parte del centro entre ambos. Los pasadores se hacen pases suaves/medios intentando no ser interceptados.",
+        execution: "60 segundos continuos. Se cuentan las interceptaciones logradas por el defensor (toque claro al balón en vuelo o suelo antes del receptor).",
+        attempts: 1, best: "Número total de interceptaciones en 60 segundos.",
+        scoring: [
+          { range: "≥ 8", pts: "88–99", label: "Lector del juego" },
+          { range: "6–7", pts: "70–87", label: "Muy anticipador" },
+          { range: "4–5", pts: "50–69", label: "Bueno" },
+          { range: "2–3", pts: "28–49", label: "Promedio" },
+          { range: "0–1", pts: "10–27", label: "Por mejorar" },
+        ],
+      },
+    ],
+    formula: "DEF = (1v1 defensivo × 0.60) + (Interceptación de pases × 0.40)",
+  },
+  {
+    key: "physical", label: "FÍSICO", abbr: "PHY", color: "#ff6ec7", icon: "💪",
+    description: "Evalúa la resistencia aeróbica, fuerza explosiva y capacidad de duelo físico del jugador.",
+    equipment: [
+      "Cinta métrica (20 m)", "Conos de delimitación",
+      "Cronómetro / app de Yo-Yo test", "Silbato o audio del test",
+      "Pared o tablero de salto vertical",
+    ],
+    tests: [
+      {
+        name: "Test Yo-Yo Intermitente (Nivel 1)", objective: "Medir capacidad aeróbica y resistencia máxima estimada (VO2max)",
+        setup: "Dos líneas paralelas separadas exactamente 20 m marcadas con conos. Una zona de recuperación de 5 m detrás de la línea de inicio. El audio del test dicta los tiempos.",
+        execution: "El jugador corre entre las dos líneas al ritmo de los pitidos del audio. Cada nivel acelera el ritmo. Tiene 10 seg de descanso entre series. El test termina cuando el jugador no llega en 2 ocasiones consecutivas.",
+        attempts: 1, best: "Se registra el último nivel y número de repetición completada.",
+        scoring: [
+          { range: "Nivel ≥ 19",  pts: "90–99", label: "Resistencia élite" },
+          { range: "Nivel 16–18", pts: "72–89", label: "Muy buena" },
+          { range: "Nivel 13–15", pts: "52–71", label: "Buena" },
+          { range: "Nivel 10–12", pts: "32–51", label: "Promedio" },
+          { range: "Nivel < 10",  pts: "10–31", label: "Por desarrollar" },
+        ],
+      },
+      {
+        name: "Salto Vertical (CMJ)", objective: "Medir altura de salto vertical con contramovimiento (fuerza explosiva de piernas)",
+        setup: "Pared lisa con cinta métrica pegada o tablero de salto. El jugador se para al lado con el brazo extendido al máximo y marca su alcance estático (referencia).",
+        execution: "El jugador flexiona rodillas libremente (contramovimiento) y salta al máximo, tocando la pared en el punto más alto. 3 intentos con 60 seg de descanso. Se mide la diferencia entre marca de salto y marca estática.",
+        attempts: 3, best: "Se toma el mejor salto de 3 intentos (mayor diferencia en cm).",
+        scoring: [
+          { range: "> 70 cm",  pts: "90–99", label: "Potencia élite" },
+          { range: "60–70 cm", pts: "72–89", label: "Muy potente" },
+          { range: "48–59 cm", pts: "52–71", label: "Bueno" },
+          { range: "35–47 cm", pts: "30–51", label: "Promedio" },
+          { range: "< 35 cm",  pts: "10–29", label: "Por mejorar" },
+        ],
+      },
+    ],
+    formula: "PHY = (Test Yo-Yo × 0.55) + (Salto vertical CMJ × 0.30) + (Índice de masa corporal y complexión observada × 0.15)",
+  },
+];
