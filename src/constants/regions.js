@@ -1,0 +1,18 @@
+export const REGIONS_CHILE = [
+  { key:"arica",        label:"Arica y Parinacota",  num:"XV",  color:"#ff6b6b", capital:"Arica"         },
+  { key:"tarapaca",     label:"Tarapacá",             num:"I",   color:"#ff9f43", capital:"Iquique"       },
+  { key:"antofagasta",  label:"Antofagasta",          num:"II",  color:"#ffd93d", capital:"Antofagasta"   },
+  { key:"atacama",      label:"Atacama",              num:"III", color:"#00E5FF", capital:"Copiapó"       },
+  { key:"coquimbo",     label:"Coquimbo",             num:"IV",  color:"#00FF94", capital:"La Serena"     },
+  { key:"valparaiso",   label:"Valparaíso",           num:"V",   color:"#7B5BFF", capital:"Valparaíso"   },
+  { key:"metropolitana",label:"Metropolitana",        num:"RM",  color:"#f5d769", capital:"Santiago"      },
+  { key:"ohiggins",     label:"O'Higgins",            num:"VI",  color:"#FF2E97", capital:"Rancagua"      },
+  { key:"maule",        label:"Maule",                num:"VII", color:"#a29bfe", capital:"Talca"         },
+  { key:"nuble",        label:"Ñuble",                num:"XVI", color:"#fd79a8", capital:"Chillán"       },
+  { key:"biobio",       label:"Biobío",               num:"VIII",color:"#00cec9", capital:"Concepción"   },
+  { key:"araucania",    label:"La Araucanía",         num:"IX",  color:"#e17055", capital:"Temuco"        },
+  { key:"losrios",      label:"Los Ríos",             num:"XIV", color:"#55efc4", capital:"Valdivia"      },
+  { key:"loslagos",     label:"Los Lagos",            num:"X",   color:"#74b9ff", capital:"Puerto Montt"  },
+  { key:"aysen",        label:"Aysén",                num:"XI",  color:"#81ecec", capital:"Coyhaique"     },
+  { key:"magallanes",   label:"Magallanes",           num:"XII", color:"#dfe6e9", capital:"Punta Arenas"  },
+];
